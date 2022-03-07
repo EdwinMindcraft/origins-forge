@@ -24,7 +24,7 @@ allprojects {
 
 	java {
 		toolchain {
-			languageVersion = JavaLanguageVersion.of(16)
+			languageVersion = JavaLanguageVersion.of(17)
 		}
 	}
 
@@ -96,14 +96,14 @@ subprojects {
 	processResources {
 		filesMatching("META-INF/mods.toml") {
 			expand 'version': project.version,
-				'mc_version': rootProject.minecraft_version
+				'mc_version': rootProject.minecraft_version,
+				'forge_requirements': rootProject.forge_requirements
 		}
 	}
 }
 
 java {
 	archivesBaseName = 'Origins'
-	toolchain.languageVersion = JavaLanguageVersion.of(16)
 }
 
 allprojects {
