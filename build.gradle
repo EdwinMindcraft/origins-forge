@@ -1,0 +1,261 @@
+import com.edwinmindcraft.gradle.ModsTransformer
+import com.google.common.io.FileWriteMode
+import com.google.common.io.Files
+
+import java.nio.charset.StandardCharsets
+import com.github.logicfan.gradle.shadow.transformers.JsonTransformer
+
+plugins {
+	id 'net.minecraftforge.gradle'
+	id 'idea'
+	id 'org.spongepowered.mixin'
+	id 'org.parchmentmc.librarian.forgegradle'
+	id 'com.github.johnrengelman.shadow'
+	id 'com.github.logicfan.gradle.shadow.json-transformer' version "1.0.1"
+	id 'maven-publish'
+}
+
+
+group = 'io.github.edwinmindcraft'
+version = '1.0.0'
+
+allprojects {
+	apply plugin: 'java'
+
+	java {
+		toolchain {
+			languageVersion = JavaLanguageVersion.of(16)
+		}
+	}
+
+	repositories {
+		mavenLocal()
+		maven { url 'https://maven.minecraftforge.net/' }
+		maven { url 'https://maven.architectury.dev' }
+		maven { url 'https://maven.theillusivec4.top' }
+		maven { url 'https://repo.spongepowered.org/maven' }
+		maven { url 'https://dvs1.progwml6.com/files/maven' }
+		maven { url 'https://maven.theillusivec4.top/' }
+		maven {
+			url 'https://www.cursemaven.com'
+			content {
+				includeGroup 'curse.maven'
+			}
+		}
+		mavenCentral()
+	}
+}
+
+subprojects {
+	apply plugin: 'net.minecraftforge.gradle'
+	apply plugin: 'org.parchmentmc.librarian.forgegradle'
+	apply plugin: 'org.spongepowered.mixin'
+
+	project.ext {
+		modVersion = rootProject.property(project.name + "_version")
+		modSpecs = rootProject.property(project.name + "_specs")
+		modName = project.name
+	}
+
+	group 'io.github.edwinmindcraft'
+	version "${rootProject.minecraft_version}-${project.modVersion}"
+
+	java {
+		archivesBaseName = project.name + "-forge-${minecraft_version}"
+	}
+
+	minecraft {
+		mappings channel: "${rootProject.mappings_channel}", version: "${rootProject.mappings_version}"
+
+		def atFile = project.file("src/main/resources/META-INF/accesstransformer.cfg")
+		if (atFile.exists()) accessTransformer atFile
+		runs {}
+	}
+
+	sourceSets {
+		main {
+			resources {
+				srcDir 'src/generated/resources'
+			}
+		}
+	}
+
+	jar {
+		manifest {
+			attributes(
+					"Specification-Title": project.name,
+					"Specification-Vendor": "Apace100",
+					"Specification-Version": project.modSpecs,
+					"Implementation-Title": project.name + "-forge",
+					"Implementation-Version": project.version,
+					"Implementation-Vendor": "EdwinMindcraft",
+					"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"))
+		}
+	}
+
+	processResources {
+		filesMatching("META-INF/mods.toml") {
+			expand 'version': project.version,
+				'mc_version': rootProject.minecraft_version
+		}
+	}
+}
+
+java {
+	archivesBaseName = 'Origins'
+	toolchain.languageVersion = JavaLanguageVersion.of(16)
+}
+
+allprojects {
+	dependencies {
+		minecraft group: 'net.minecraftforge', name: 'forge', version: "${rootProject.minecraft_version}-${rootProject.forge_version}"
+		testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.6.2'
+		implementation group: 'org.jetbrains', name: 'annotations', version: '22.0.0'
+		implementation group: 'org.spongepowered', name: 'mixin', version: "${rootProject.mixin_version}"
+		annotationProcessor "org.spongepowered:mixin:${rootProject.mixin_version}:processor"
+		testAnnotationProcessor "org.spongepowered:mixin:${rootProject.mixin_version}:processor"
+
+		compileOnly fg.deobf(group: 'mezz.jei', name: "jei-${rootProject.minecraft_version}", version: rootProject.jei_version, classifier: 'api')
+		runtimeOnly fg.deobf(group: 'mezz.jei', name: "jei-${rootProject.minecraft_version}", version: rootProject.jei_version)
+
+		implementation fg.deobf(group: 'me.shedaniel.cloth', name: 'cloth-config-forge', version: "${cloth_config_version}")
+		implementation fg.deobf(group: 'top.theillusivec4.caelus', name: 'caelus-forge', version: "${minecraft_version}-${caelus_version}")
+	}
+}
+
+dependencies {
+	subprojects.forEach({
+		implementation(it) {
+			exclude group: 'net.minecraftforge', module: 'forge'
+		}
+	})
+}
+
+project(":apoli") {
+	dependencies {
+		implementation project(":calio")
+	}
+
+	mixin {
+		add sourceSets.main, 'apoli.refmap.json'
+
+		config 'apoli.mixins.json'
+	}
+}
+
+project(":origins") {
+	dependencies {
+		implementation project(":calio")
+		implementation project(":apoli")
+	}
+
+	mixin {
+		add sourceSets.main, 'origins.refmap.json'
+
+		config 'origins.mixins.json'
+	}
+}
+
+mixin {
+	config 'apoli.mixins.json'
+	config 'origins.mixins.json'
+}
+
+jar.finalizedBy('reobfJar')
+
+task mergeMappings(type: Copy) {
+	dependsOn configurations.compileClasspath
+	from {
+		configurations.compileClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+	}
+	include 'META-INF/*-mappings.tsrg'
+	into project.file("${compileJava.temporaryDir}")
+	eachFile {path = name}
+	doLast {
+		def f = new File("${compileJava.temporaryDir}/${compileJava.name}-mappings.tsrg")
+		var sink = Files.asCharSink(f, StandardCharsets.UTF_8, FileWriteMode.APPEND)
+		project.fileTree("${compileJava.temporaryDir}") {
+			include "*-mappings.tsrg"
+			exclude "compileJava-mappings.tsrg"
+		}.forEach(t -> {
+			Files.asCharSource(t, StandardCharsets.UTF_8).copyTo(sink)
+		})
+	}
+}
+
+shadowJar {
+	classifier 'unified'
+	dependencies {
+		exclude(dependency {
+			it.moduleGroup != 'io.github.edwinmindcraft'
+		})
+	}
+	append 'META-INF/accesstransformer.cfg'
+	transform(new JsonTransformer(resource: 'META-INF/coremods.json'))
+	transform(new ModsTransformer())
+	manifest {
+		attributes(['MixinConfigs': 'origins.mixins.json,apoli.mixins.json'])
+	}
+	finalizedBy(mergeMappings)
+}
+
+mergeMappings.finalizedBy(reobf.maybeCreate('shadowJar'))
+build.dependsOn('shadowJar')
+
+minecraft {
+	mappings channel: "${rootProject.mappings_channel}", version: "${rootProject.mappings_version}"
+
+	runs {
+		client {
+			workingDirectory project.file('run')
+			property 'forge.logging.markers', 'REGISTRIES'
+			property 'forge.logging.console.level', 'debug'
+
+			arg '--mixin.debug=true'
+			subprojects.each {mod ->
+				mods.create(mod.ext.modName) {
+					source mod.sourceSets.main
+				}
+			}
+		}
+
+		server {
+			workingDirectory project.file('run')
+
+			property 'forge.logging.markers', 'REGISTRIES'
+			property 'forge.logging.console.level', 'debug'
+
+			arg '--mixin.debug=true'
+			subprojects.each {mod ->
+				mods.create(mod.ext.modName) {
+					source mod.sourceSets.main
+				}
+			}
+		}
+
+		data {
+			workingDirectory project.file('run')
+			property 'forge.logging.markers', 'REGISTRIES'
+			property 'forge.logging.console.level', 'debug'
+
+			subprojects.each {mod ->
+				mods.create(mod.ext.modName) {
+					source mod.sourceSets.main
+				}
+			}
+		}
+
+		subprojects.each {mod ->
+			String name = "data" + org.apache.commons.lang3.StringUtils.capitalize(mod.ext.modName);
+			runs.create(name) { run ->
+				parent runs["data"]
+				subprojects.each {if (it != mod) run.args '--existing-mod', it.name }
+				args '--all'
+				args '--mod', mod.ext.modName
+				args '--existing', mod.file('src/main/resources')
+				args '--existing', mod.file('src/generated/resources')
+				args '--output', mod.file('src/generated/resources/')
+			}
+		}
+	}
+}

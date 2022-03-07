@@ -1,0 +1,28 @@
+pluginManagement {
+	resolutionStrategy {
+		eachPlugin({
+			if (requested.id.namespace == 'net.minecraftforge')
+				it.useModule(group: 'net.minecraftforge.gradle', name:'ForgeGradle', version: '5.1.31')
+			if (requested.id.namespace == 'org.spongepowered')
+				it.useModule(group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT')
+			if (requested.id.namespace == 'org.parchmentmc.librarian')
+				it.useModule(group: 'org.parchmentmc', name: 'librarian', version: '1.1.5')
+		})
+	}
+	repositories {
+		mavenLocal()
+		gradlePluginPortal()
+		maven { url 'https://repo.spongepowered.org/maven' }
+		maven { url "https://maven.minecraftforge.net" }
+		maven { url "https://plugins.gradle.org/m2" }
+		maven { url "https://maven.shedaniel.me/" }
+		maven { url 'https://maven.parchmentmc.org' }
+		mavenCentral()
+	}
+}
+
+rootProject.name = 'Origins'
+
+include 'calio'
+include 'apoli'
+include 'origins'
