@@ -8,5 +8,5 @@
 	branch = 1.17.x/forge
 [submodule "origins"]
 	path = origins
-	url = git@github.com:EdwinMindcraft/origins-architectury.git
+	url = https://github.com/EdwinMindcraft/origins-architectury
 	branch = 1.17.x
