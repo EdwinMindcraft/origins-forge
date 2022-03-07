@@ -5,11 +5,13 @@ import com.github.jengelman.gradle.plugins.shadow.transformers.Transformer;
 import com.github.jengelman.gradle.plugins.shadow.transformers.TransformerContext;
 import org.codehaus.groovy.runtime.StringGroovyMethods;
 import org.gradle.api.file.FileTreeElement;
+import shadow.org.apache.tools.zip.ZipEntry;
 import shadow.org.apache.tools.zip.ZipOutputStream;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,12 +50,16 @@ public class ModsTransformer implements Transformer {
 
 	@Override
 	public void modifyOutputStream(ZipOutputStream os, boolean preserveFileTimestamps) {
-		/*ZipEntry entry = new ZipEntry("META-INF/mods.toml");
-		entry.time = TransformerContext.getEntryTimestamp(preserveFileTimestamps, entry.time);
-		os.putNextEntry(entry);
-		os.write(lines.stream().reduce((x, y) -> x + "\n" + y).orElse("").getBytes(StandardCharsets.UTF_8));
+		ZipEntry entry = new ZipEntry("META-INF/mods.toml");
+		try {
+			entry.setTime(TransformerContext.getEntryTimestamp(preserveFileTimestamps, entry.getTime()));
+			os.putNextEntry(entry);
+			os.write(this.lines.stream().reduce((x, y) -> x + "\n" + y).orElse("").getBytes(StandardCharsets.UTF_8));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-		lines.clear();*/
+		this.lines.clear();
 	}
 
 	public String getName() {

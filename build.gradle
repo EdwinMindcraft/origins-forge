@@ -17,7 +17,7 @@ plugins {
 
 
 group = 'io.github.edwinmindcraft'
-version = '1.0.0'
+version = "${minecraft_version}-${origins_version}"
 
 allprojects {
 	apply plugin: 'java'
@@ -90,6 +90,11 @@ subprojects {
 					"Implementation-Version": project.version,
 					"Implementation-Vendor": "EdwinMindcraft",
 					"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"))
+		}
+		jar {
+			from("LICENSE") {
+				rename { "${it}_${project.archivesBaseName}" }
+			}
 		}
 	}
 
@@ -194,7 +199,15 @@ shadowJar {
 	transform(new JsonTransformer(resource: 'META-INF/coremods.json'))
 	transform(new ModsTransformer())
 	manifest {
-		attributes(['MixinConfigs': 'origins.mixins.json,apoli.mixins.json'])
+		attributes(
+				"Specification-Title": "origins",
+				"Specification-Vendor": "Apace100",
+				"Specification-Version": project.origins_specs,
+				"Implementation-Title": "origins-forge",
+				"Implementation-Version": project.version,
+				"Implementation-Vendor": "EdwinMindcraft",
+				"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+				'MixinConfigs': 'origins.mixins.json,apoli.mixins.json')
 	}
 	finalizedBy(mergeMappings)
 }
