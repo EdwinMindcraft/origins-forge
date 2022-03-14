@@ -126,6 +126,12 @@ allprojects {
 		implementation fg.deobf(group: 'me.shedaniel.cloth', name: 'cloth-config-forge', version: "${cloth_config_version}")
 		implementation fg.deobf(group: 'top.theillusivec4.caelus', name: 'caelus-forge', version: "${minecraft_version}-${caelus_version}")
 	}
+
+	tasks.withType(JavaCompile) {
+		if (gradle.startParameter.taskNames.contains("build")) {
+			outputs.upToDateWhen { false }
+		}
+	}
 }
 
 dependencies {
