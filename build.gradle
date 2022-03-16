@@ -121,9 +121,12 @@ allprojects {
 		testAnnotationProcessor "org.spongepowered:mixin:${rootProject.mixin_version}:processor"
 
 		compileOnly fg.deobf(group: 'mezz.jei', name: "jei-${rootProject.minecraft_version}", version: rootProject.jei_version, classifier: 'api')
-		runtimeOnly fg.deobf(group: 'mezz.jei', name: "jei-${rootProject.minecraft_version}", version: rootProject.jei_version)
+		compileOnly "curse.maven:citadel-331936:3642722"
 
-		implementation fg.deobf(group: 'me.shedaniel.cloth', name: 'cloth-config-forge', version: "${cloth_config_version}")
+		runtimeOnly fg.deobf(group: 'mezz.jei', name: "jei-${rootProject.minecraft_version}", version: rootProject.jei_version)
+		//runtimeOnly "curse.maven:citadel-331936:3642722"
+
+		//implementation fg.deobf(group: 'me.shedaniel.cloth', name: 'cloth-config-forge', version: "${cloth_config_version}")
 		implementation fg.deobf(group: 'top.theillusivec4.caelus', name: 'caelus-forge', version: "${minecraft_version}-${caelus_version}")
 	}
 
@@ -265,7 +268,7 @@ minecraft {
 		}
 
 		subprojects.each {mod ->
-			String name = "data" + org.apache.commons.lang3.StringUtils.capitalize(mod.ext.modName);
+			String name = "data" + org.apache.commons.lang3.StringUtils.capitalize(mod.ext.modName)
 			runs.create(name) { run ->
 				parent runs["data"]
 				subprojects.each {if (it != mod) run.args '--existing-mod', it.name }
