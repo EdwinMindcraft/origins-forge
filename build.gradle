@@ -42,6 +42,12 @@ allprojects {
 				includeGroup 'curse.maven'
 			}
 		}
+		maven {
+			url 'https://repo.unascribed.com'
+			content {
+				includeGroup "com.unascribed"
+			}
+		}
 		mavenCentral()
 	}
 }
@@ -122,9 +128,11 @@ allprojects {
 
 		compileOnly fg.deobf(group: 'mezz.jei', name: "jei-${rootProject.minecraft_version}", version: rootProject.jei_version, classifier: 'api')
 		compileOnly "curse.maven:citadel-331936:3642722"
+		compileOnly fg.deobf("curse.maven:ears-412013:3616896")
 
 		runtimeOnly fg.deobf(group: 'mezz.jei', name: "jei-${rootProject.minecraft_version}", version: rootProject.jei_version)
 		//runtimeOnly "curse.maven:citadel-331936:3642722"
+		//runtimeOnly fg.deobf("curse.maven:ears-412013:3616896")
 
 		//implementation fg.deobf(group: 'me.shedaniel.cloth', name: 'cloth-config-forge', version: "${cloth_config_version}")
 		implementation fg.deobf(group: 'top.theillusivec4.caelus', name: 'caelus-forge', version: "${minecraft_version}-${caelus_version}")
