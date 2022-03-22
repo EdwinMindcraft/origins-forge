@@ -255,7 +255,7 @@ minecraft {
 			property 'forge.logging.markers', 'REGISTRIES'
 			property 'forge.logging.console.level', 'debug'
 
-			arg '--mixin.debug=true'
+			//arg '--mixin.debug=true'
 			subprojects.each {mod ->
 				mods.create(mod.ext.modName) {
 					source mod.sourceSets.main
