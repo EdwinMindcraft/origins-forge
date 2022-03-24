@@ -155,7 +155,9 @@ dependencies {
 
 project(":apoli") {
 	dependencies {
-		implementation project(":calio")
+		implementation (project(":calio")) {
+			exclude group: 'net.minecraftforge', module: 'forge'
+		}
 	}
 
 	mixin {
@@ -167,8 +169,12 @@ project(":apoli") {
 
 project(":origins") {
 	dependencies {
-		implementation project(":calio")
-		implementation project(":apoli")
+		implementation (project(":calio")) {
+			exclude group: 'net.minecraftforge', module: 'forge'
+		}
+		implementation (project(":apoli")) {
+			exclude group: 'net.minecraftforge', module: 'forge'
+		}
 	}
 
 	mixin {
