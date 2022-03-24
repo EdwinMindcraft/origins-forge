@@ -125,15 +125,15 @@ allprojects {
 		testAnnotationProcessor "org.spongepowered:mixin:${rootProject.mixin_version}:processor"
 
 		compileOnly fg.deobf(group: 'mezz.jei', name: "jei-${rootProject.minecraft_version}", version: rootProject.jei_version, classifier: 'api')
-		compileOnly "curse.maven:citadel-331936:3642722"
-		compileOnly fg.deobf("curse.maven:ears-412013:3616896")
+		compileOnly "curse.maven:citadel-331936:${rootProject.citadel_file}"
+		compileOnly fg.deobf("curse.maven:ears-412013:${rootProject.ears_file}")
 
 		runtimeOnly fg.deobf(group: 'mezz.jei', name: "jei-${rootProject.minecraft_version}", version: rootProject.jei_version)
-		//runtimeOnly "curse.maven:citadel-331936:3642722"
-		//runtimeOnly fg.deobf("curse.maven:ears-412013:3616896")
+		//runtimeOnly "curse.maven:citadel-331936:${rootProject.citadel_file}"
+		//runtimeOnly fg.deobf("curse.maven:ears-412013:${rootProject.ears_file}")
 
 		//implementation fg.deobf(group: 'me.shedaniel.cloth', name: 'cloth-config-forge', version: "${cloth_config_version}")
-		implementation fg.deobf(group: 'top.theillusivec4.caelus', name: 'caelus-forge', version: "${minecraft_version}-${caelus_version}")
+		implementation fg.deobf(group: 'top.theillusivec4.caelus', name: 'caelus-forge', version: "1.18.1-${caelus_version}")
 		runtimeOnly(fg.deobf(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${minecraft_version}-SNAPSHOT") {
 			exclude group: 'net.minecraftforge'
 		})
@@ -159,7 +159,7 @@ dependencies {
 
 project(":apoli") {
 	dependencies {
-		implementation(project(":calio")) {
+		implementation (project(":calio")) {
 			exclude group: 'net.minecraftforge', module: 'forge'
 		}
 	}
@@ -172,11 +172,13 @@ project(":apoli") {
 }
 
 project(":origins") {
+	evaluationDependsOn(":apoli")
+
 	dependencies {
-		implementation(project(":calio")) {
+		implementation (project(":calio")) {
 			exclude group: 'net.minecraftforge', module: 'forge'
 		}
-		implementation(project(":apoli")) {
+		implementation (project(":apoli")) {
 			exclude group: 'net.minecraftforge', module: 'forge'
 		}
 	}
