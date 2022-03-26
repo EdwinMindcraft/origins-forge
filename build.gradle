@@ -1,9 +1,9 @@
 import com.edwinmindcraft.gradle.ModsTransformer
+import com.github.logicfan.gradle.shadow.transformers.JsonTransformer
 import com.google.common.io.FileWriteMode
 import com.google.common.io.Files
 
 import java.nio.charset.StandardCharsets
-import com.github.logicfan.gradle.shadow.transformers.JsonTransformer
 
 plugins {
 	id 'net.minecraftforge.gradle'
@@ -105,10 +105,11 @@ subprojects {
 	}
 
 	processResources {
+		outputs.upToDateWhen { false }
 		filesMatching("META-INF/mods.toml") {
 			expand 'version': project.version,
-				'mc_version': rootProject.minecraft_version,
-				'forge_requirements': rootProject.forge_requirements
+					'mc_version': rootProject.minecraft_version,
+					'forge_requirements': rootProject.forge_requirements
 		}
 	}
 }
@@ -155,7 +156,7 @@ dependencies {
 
 project(":apoli") {
 	dependencies {
-		implementation (project(":calio")) {
+		implementation(project(":calio")) {
 			exclude group: 'net.minecraftforge', module: 'forge'
 		}
 	}
@@ -169,10 +170,10 @@ project(":apoli") {
 
 project(":origins") {
 	dependencies {
-		implementation (project(":calio")) {
+		implementation(project(":calio")) {
 			exclude group: 'net.minecraftforge', module: 'forge'
 		}
-		implementation (project(":apoli")) {
+		implementation(project(":apoli")) {
 			exclude group: 'net.minecraftforge', module: 'forge'
 		}
 	}
@@ -198,7 +199,7 @@ task mergeMappings(type: Copy) {
 	}
 	include 'META-INF/*-mappings.tsrg'
 	into project.file("${compileJava.temporaryDir}")
-	eachFile {path = name}
+	eachFile { path = name }
 	doLast {
 		def f = new File("${compileJava.temporaryDir}/${compileJava.name}-mappings.tsrg")
 		var sink = Files.asCharSink(f, StandardCharsets.UTF_8, FileWriteMode.APPEND)
@@ -248,7 +249,7 @@ minecraft {
 			property 'forge.logging.console.level', 'debug'
 
 			arg '--mixin.debug=true'
-			subprojects.each {mod ->
+			subprojects.each { mod ->
 				mods.create(mod.ext.modName) {
 					source mod.sourceSets.main
 				}
@@ -262,7 +263,7 @@ minecraft {
 			property 'forge.logging.console.level', 'debug'
 
 			//arg '--mixin.debug=true'
-			subprojects.each {mod ->
+			subprojects.each { mod ->
 				mods.create(mod.ext.modName) {
 					source mod.sourceSets.main
 				}
@@ -274,18 +275,18 @@ minecraft {
 			property 'forge.logging.markers', 'REGISTRIES'
 			property 'forge.logging.console.level', 'debug'
 
-			subprojects.each {mod ->
+			subprojects.each { mod ->
 				mods.create(mod.ext.modName) {
 					source mod.sourceSets.main
 				}
 			}
 		}
 
-		subprojects.each {mod ->
+		subprojects.each { mod ->
 			String name = "data" + org.apache.commons.lang3.StringUtils.capitalize(mod.ext.modName)
 			runs.create(name) { run ->
 				parent runs["data"]
-				subprojects.each {if (it != mod) run.args '--existing-mod', it.name }
+				subprojects.each { if (it != mod) run.args '--existing-mod', it.name }
 				args '--all'
 				args '--mod', mod.ext.modName
 				args '--existing', mod.file('src/main/resources')
