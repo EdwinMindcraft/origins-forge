@@ -192,32 +192,15 @@ mixin {
 
 jar.finalizedBy('reobfJar')
 
-task mergeMappings(type: Copy) {
-	dependsOn configurations.compileClasspath
-	from {
-		configurations.compileClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
-	}
-	include 'META-INF/*-mappings.tsrg'
-	into project.file("${compileJava.temporaryDir}")
-	eachFile { path = name }
-	doLast {
-		def f = new File("${compileJava.temporaryDir}/${compileJava.name}-mappings.tsrg")
-		var sink = Files.asCharSink(f, StandardCharsets.UTF_8, FileWriteMode.APPEND)
-		project.fileTree("${compileJava.temporaryDir}") {
-			include "*-mappings.tsrg"
-			exclude "compileJava-mappings.tsrg"
-		}.forEach(t -> {
-			Files.asCharSource(t, StandardCharsets.UTF_8).copyTo(sink)
-		})
-	}
-}
-
 shadowJar {
 	classifier 'unified'
 	dependencies {
 		exclude(dependency {
 			it.moduleGroup != 'io.github.edwinmindcraft'
 		})
+	}
+	subprojects.each {
+		dependsOn(it.getTasksByName("reobfJar", true))
 	}
 	append 'META-INF/accesstransformer.cfg'
 	transform(new JsonTransformer(resource: 'META-INF/coremods.json'))
@@ -233,10 +216,9 @@ shadowJar {
 				"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
 				'MixinConfigs': 'origins.mixins.json,apoli.mixins.json')
 	}
-	finalizedBy(mergeMappings)
 }
 
-mergeMappings.finalizedBy(reobf.maybeCreate('shadowJar'))
+shadowJar.finalizedBy(reobf.maybeCreate('shadowJar'))
 build.dependsOn('shadowJar')
 
 minecraft {
