@@ -197,9 +197,10 @@ jar.finalizedBy('reobfJar')
 
 shadowJar {
 	classifier 'unified'
+	configurations = [project.configurations.compileClasspath]
 	dependencies {
-		exclude(dependency {
-			it.moduleGroup != 'io.github.edwinmindcraft'
+		include(dependency {
+			it.moduleGroup == 'io.github.edwinmindcraft'
 		})
 		include dependency(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${minecraft_version}-SNAPSHOT")
 	}
@@ -218,7 +219,7 @@ shadowJar {
 				"Implementation-Version": project.version,
 				"Implementation-Vendor": "EdwinMindcraft",
 				"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-				'MixinConfigs': 'origins.mixins.json,apoli.mixins.json')
+				'MixinConfigs': 'origins.mixins.json,apoli.mixins.json,additionalentityattributes.mixins.json')
 	}
 }
 
