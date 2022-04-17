@@ -39,7 +39,7 @@ public class ModsTransformer implements Transformer {
 			e.printStackTrace();
 		}
 		if (!this.lines.isEmpty())
-			result.removeIf(x -> StringGroovyMethods.startsWithAny(x, "modLoader=", "loaderVersion=", "license=", "issueTrackerURL="));
+			result.removeIf(x -> StringGroovyMethods.startsWithAny(x, "modLoader=", "loaderVersion=", "license=", "issueTrackerURL=", "showAsResourcePack="));
 		this.lines.addAll(result);
 	}
 

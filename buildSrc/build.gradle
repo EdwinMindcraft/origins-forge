@@ -15,5 +15,4 @@ repositories {
 
 dependencies {
 	implementation 'gradle.plugin.com.github.johnrengelman:shadow:7.1.0'
-	implementation 'com.google.guava:guava:31.1-jre'
 }
