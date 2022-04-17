@@ -1,9 +1,5 @@
 import com.edwinmindcraft.gradle.ModsTransformer
 import com.github.logicfan.gradle.shadow.transformers.JsonTransformer
-import com.google.common.io.FileWriteMode
-import com.google.common.io.Files
-
-import java.nio.charset.StandardCharsets
 
 plugins {
 	id 'net.minecraftforge.gradle'
@@ -48,6 +44,7 @@ allprojects {
 				includeGroup "com.unascribed"
 			}
 		}
+		maven { url 'https://jitpack.io' }
 		mavenCentral()
 	}
 }
@@ -137,6 +134,12 @@ allprojects {
 
 		//implementation fg.deobf(group: 'me.shedaniel.cloth', name: 'cloth-config-forge', version: "${cloth_config_version}")
 		implementation fg.deobf(group: 'top.theillusivec4.caelus', name: 'caelus-forge', version: "${minecraft_version}-${caelus_version}")
+		runtimeOnly(fg.deobf(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${minecraft_version}-SNAPSHOT") {
+			exclude group: 'net.minecraftforge'
+		})
+		compileOnly(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${minecraft_version}-SNAPSHOT") {
+			exclude group: 'net.minecraftforge'
+		}
 	}
 
 	tasks.withType(JavaCompile) {
@@ -198,6 +201,7 @@ shadowJar {
 		exclude(dependency {
 			it.moduleGroup != 'io.github.edwinmindcraft'
 		})
+		include dependency(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${minecraft_version}-SNAPSHOT")
 	}
 	subprojects.each {
 		dependsOn(it.getTasksByName("reobfJar", true))
