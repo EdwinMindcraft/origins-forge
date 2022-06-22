@@ -131,6 +131,7 @@ allprojects {
 		runtimeOnly fg.deobf(group: 'mezz.jei', name: "jei-${rootProject.minecraft_version}", version: rootProject.jei_version)
 		//runtimeOnly "curse.maven:citadel-331936:${rootProject.citadel_file}"
 		//runtimeOnly fg.deobf("curse.maven:ears-412013:${rootProject.ears_file}")
+		//runtimeOnly "curse.maven:apocalypse-521235:3837371"
 
 		//implementation fg.deobf(group: 'me.shedaniel.cloth', name: 'cloth-config-forge', version: "${cloth_config_version}")
 		implementation fg.deobf(group: 'top.theillusivec4.caelus', name: 'caelus-forge', version: "1.18.1-${caelus_version}")
