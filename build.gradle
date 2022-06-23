@@ -132,6 +132,9 @@ allprojects {
 		//runtimeOnly "curse.maven:citadel-331936:${rootProject.citadel_file}"
 		//runtimeOnly fg.deobf("curse.maven:ears-412013:${rootProject.ears_file}")
 		//runtimeOnly "curse.maven:apocalypse-521235:3837371"
+		//runtimeOnly fg.deobf("curse.maven:originsplusplus-602828:3836472")
+		//runtimeOnly fg.deobf("curse.maven:pehkui-319596:3808012")
+		//runtimeOnly fg.deobf("curse.maven:connectivity-470193:3833738")
 
 		//implementation fg.deobf(group: 'me.shedaniel.cloth', name: 'cloth-config-forge', version: "${cloth_config_version}")
 		implementation fg.deobf(group: 'top.theillusivec4.caelus', name: 'caelus-forge', version: "1.18.1-${caelus_version}")
