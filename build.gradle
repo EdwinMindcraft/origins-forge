@@ -124,11 +124,13 @@ allprojects {
 		annotationProcessor "org.spongepowered:mixin:${rootProject.mixin_version}:processor"
 		testAnnotationProcessor "org.spongepowered:mixin:${rootProject.mixin_version}:processor"
 
-		compileOnly fg.deobf(group: 'mezz.jei', name: "jei-${rootProject.minecraft_version}", version: rootProject.jei_version, classifier: 'api')
+		compileOnly fg.deobf(group: 'mezz.jei', name: "jei-${rootProject.minecraft_version}-common-api", version: rootProject.jei_version)
+		compileOnly fg.deobf(group: 'mezz.jei', name: "jei-${rootProject.minecraft_version}-forge-api", version: rootProject.jei_version)
+
 		compileOnly "curse.maven:citadel-331936:${rootProject.citadel_file}"
 		compileOnly fg.deobf("curse.maven:ears-412013:${rootProject.ears_file}")
 
-		runtimeOnly fg.deobf(group: 'mezz.jei', name: "jei-${rootProject.minecraft_version}", version: rootProject.jei_version)
+		runtimeOnly fg.deobf(group: 'mezz.jei', name: "jei-${rootProject.minecraft_version}-forge", version: rootProject.jei_version)
 		//runtimeOnly "curse.maven:citadel-331936:${rootProject.citadel_file}"
 		//runtimeOnly fg.deobf("curse.maven:ears-412013:${rootProject.ears_file}")
 		//runtimeOnly "curse.maven:apocalypse-521235:3837371"
@@ -137,7 +139,7 @@ allprojects {
 		//runtimeOnly fg.deobf("curse.maven:connectivity-470193:3833738")
 
 		//implementation fg.deobf(group: 'me.shedaniel.cloth', name: 'cloth-config-forge', version: "${cloth_config_version}")
-		implementation fg.deobf(group: 'top.theillusivec4.caelus', name: 'caelus-forge', version: "1.18.1-${caelus_version}")
+		implementation fg.deobf(group: 'top.theillusivec4.caelus', name: 'caelus-forge', version: "1.19-${caelus_version}")
 		runtimeOnly(fg.deobf(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${minecraft_version}-SNAPSHOT") {
 			exclude group: 'net.minecraftforge'
 		})
