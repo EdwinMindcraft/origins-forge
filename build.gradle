@@ -64,7 +64,7 @@ subprojects {
 	version "${rootProject.minecraft_version}-${project.modVersion}"
 
 	java {
-		archivesBaseName = project.name + "-forge-${minecraft_version}"
+		archivesBaseName = project.name + "-forge"
 	}
 
 	minecraft {
@@ -145,6 +145,7 @@ allprojects {
 		})
 		compileOnly(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${minecraft_version}-SNAPSHOT") {
 			exclude group: 'net.minecraftforge'
+			jarJar.ranged(it, "[1.19,)")
 		}
 	}
 
@@ -193,6 +194,10 @@ project(":origins") {
 		add sourceSets.main, 'origins.refmap.json'
 
 		config 'origins.mixins.json'
+	}
+
+	jarJar {
+		enable()
 	}
 }
 
