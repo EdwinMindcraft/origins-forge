@@ -1,3 +1,4 @@
+import com.edwinmindcraft.gradle.BrokenJarJar
 import com.edwinmindcraft.gradle.ModsTransformer
 import com.github.logicfan.gradle.shadow.transformers.JsonTransformer
 
@@ -140,13 +141,8 @@ allprojects {
 
 		//implementation fg.deobf(group: 'me.shedaniel.cloth', name: 'cloth-config-forge', version: "${cloth_config_version}")
 		implementation fg.deobf(group: 'top.theillusivec4.caelus', name: 'caelus-forge', version: "1.19-${caelus_version}")
-		runtimeOnly(fg.deobf(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${minecraft_version}-SNAPSHOT") {
-			exclude group: 'net.minecraftforge'
-		})
-		compileOnly(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${minecraft_version}-SNAPSHOT") {
-			exclude group: 'net.minecraftforge'
-			jarJar.ranged(it, "[1.19,)")
-		}
+		runtimeOnly(fg.deobf(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${aea_version}-${minecraft_version}", transitive: false))
+		compileOnly(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${aea_version}-${minecraft_version}", transitive: false)
 	}
 
 	tasks.withType(JavaCompile) {
@@ -164,40 +160,168 @@ dependencies {
 	})
 }
 
-project(":apoli") {
-	dependencies {
-		implementation (project(":calio")) {
-			exclude group: 'net.minecraftforge', module: 'forge'
+project(":calio") {
+	reobf.maybeCreate("jar").dependsOn(":apoli:classes")
+	reobf.maybeCreate("jar").dependsOn(":origins:classes")
+
+	jar {
+		manifest {
+			attributes(
+					"Specification-Title": "calio",
+					"Specification-Vendor": "Apace100",
+					"Specification-Version": project.calio_specs,
+					"Implementation-Title": "calio-forge",
+					"Implementation-Version": project.version,
+					"Implementation-Vendor": "EdwinMindcraft",
+					"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"))
 		}
 	}
+}
+
+project(":apoli") {
+	evaluationDependsOn(':calio')
+
+	dependencies {
+		implementation(project(":calio")) {
+			exclude group: 'net.minecraftforge', module: 'forge'
+		}
+
+		jarJar(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "[${aea_version}-${minecraft_version},)", transitive: false) {
+			jarJar.pin(it, "${aea_version}-${minecraft_version}")
+		}
+
+		jarJar(project(':calio')) {
+			transitive = false
+			jarJar.pin(it, "${minecraft_version}-${calio_version}")
+			jarJar.ranged(it, "[${minecraft_version}-${calio_specs},)")
+		}
+	}
+
+	jar {
+		manifest {
+			attributes(
+					"Specification-Title": "apoli",
+					"Specification-Vendor": "Apace100",
+					"Specification-Version": project.apoli_specs,
+					"Implementation-Title": "apoli-forge",
+					"Implementation-Version": project.version,
+					"Implementation-Vendor": "EdwinMindcraft",
+					"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+					'MixinConfigs': 'apoli.mixins.json')
+		}
+	}
+
+	//TODO Wait for FG to do this properly.
+	def jij = tasks.create("brokenJarJar", BrokenJarJar) {
+		dependsOn(":calio:reobfJar")
+		finalizedBy(reobf.maybeCreate('brokenJarJar'))
+
+		group("jarJar")
+		description("Create a combined JAR of project and selected dependencies")
+		classifier("fatjar")
+
+		manifest {
+			inheritFrom(project.getTasks().getByName("jar").manifest)
+		}
+
+		from(sourceSets.main.output)
+
+		configuration(project.configurations.jarJar)
+	}
+
+	reobf.maybeCreate("jar").dependsOn(":origins:classes")
 
 	mixin {
 		add sourceSets.main, 'apoli.refmap.json'
 
 		config 'apoli.mixins.json'
 	}
+
+	tasks.findByName("jarJar").dependsOn(project(":calio").tasks.findByName("reobfJar"))
+
+	artifacts {
+		archives jar
+		archives jij
+	}
+
 }
 
 project(":origins") {
 	evaluationDependsOn(":apoli")
 
 	dependencies {
-		implementation (project(":calio")) {
+		implementation(project(":calio")) {
 			exclude group: 'net.minecraftforge', module: 'forge'
 		}
-		implementation (project(":apoli")) {
+		implementation(project(":apoli")) {
 			exclude group: 'net.minecraftforge', module: 'forge'
 		}
+
+		jarJar(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "[${aea_version}-${minecraft_version},)", transitive: false) {
+			jarJar.pin(it, "${aea_version}-${minecraft_version}")
+		}
+
+		jarJar(project(':calio')) {
+			transitive = false
+			jarJar.pin(it, "${minecraft_version}-${calio_version}")
+			jarJar.ranged(it, "[${minecraft_version}-${calio_specs},)")
+		}
+
+		jarJar(project(':apoli')) {
+			transitive = false
+			jarJar.pin(it, "${minecraft_version}-${apoli_version}")
+			jarJar.ranged(it, "[${minecraft_version}-${apoli_specs},)")
+		}
+	}
+
+	jar {
+		manifest {
+			attributes(
+					"Specification-Title": "origins",
+					"Specification-Vendor": "Apace100",
+					"Specification-Version": project.origins_specs,
+					"Implementation-Title": "origins-forge",
+					"Implementation-Version": project.version,
+					"Implementation-Vendor": "EdwinMindcraft",
+					"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+					'MixinConfigs': 'origins.mixins.json')
+		}
+	}
+
+	compileJava.dependsOn(":apoli:classes", ":calio:classes")
+
+	//TODO Wait for FG to do this properly.
+	def jij = tasks.create("brokenJarJar", BrokenJarJar) {
+		dependsOn(":apoli:reobfJar", ":calio:reobfJar")
+		finalizedBy(reobf.maybeCreate('brokenJarJar'))
+
+		group("jarJar")
+		description("Create a combined JAR of project and selected dependencies")
+		classifier("fatjar")
+
+		manifest {
+			inheritFrom(project.getTasks().getByName("jar").manifest)
+		}
+
+		from(sourceSets.main.output)
+
+		configuration(project.configurations.jarJar)
+	}
+
+	artifacts {
+		archives jar
+		archives jij
+	}
+
+	tasks.findByName("jarJar").configure {
+		dependsOn(":apoli:reobfJar", ":calio:reobfJar")
+		finalizedBy(reobf.maybeCreate('jarJar'))
 	}
 
 	mixin {
 		add sourceSets.main, 'origins.refmap.json'
 
 		config 'origins.mixins.json'
-	}
-
-	jarJar {
-		enable()
 	}
 }
 
@@ -208,6 +332,7 @@ mixin {
 
 jar.finalizedBy('reobfJar')
 
+
 shadowJar {
 	classifier 'unified'
 	configurations = [project.configurations.compileClasspath]
@@ -215,7 +340,7 @@ shadowJar {
 		include(dependency {
 			it.moduleGroup == 'io.github.edwinmindcraft'
 		})
-		include dependency(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${minecraft_version}-SNAPSHOT")
+		include dependency(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${aea_version}-${minecraft_version}")
 	}
 	subprojects.each {
 		dependsOn(it.getTasksByName("reobfJar", true))
