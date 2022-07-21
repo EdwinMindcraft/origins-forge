@@ -2,7 +2,7 @@ pluginManagement {
 	resolutionStrategy {
 		eachPlugin({
 			if (requested.id.namespace == 'net.minecraftforge')
-				it.useModule(group: 'net.minecraftforge.gradle', name:'ForgeGradle', version: '5.1.34')
+				it.useModule(group: 'net.minecraftforge.gradle', name:'ForgeGradle', version: '5.1.52')
 			if (requested.id.namespace == 'org.spongepowered')
 				it.useModule(group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT')
 			if (requested.id.namespace == 'org.parchmentmc.librarian')
@@ -10,9 +10,6 @@ pluginManagement {
 		})
 	}
 	repositories {
-		//No you cannot use forge in intellij.
-		//Gradle 7.4.2 and down do not support HTTP/1.1 properly.
-		//For those wondering IDEA-292250.
 		mavenLocal()
 		gradlePluginPortal()
 		maven { url 'https://repo.spongepowered.org/maven' }
