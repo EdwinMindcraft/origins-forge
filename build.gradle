@@ -65,7 +65,7 @@ subprojects {
 	version "${rootProject.minecraft_version}-${project.modVersion}"
 
 	java {
-		archivesBaseName = project.name + "-forge-${minecraft_version}"
+		archivesBaseName = project.name + "-forge"
 	}
 
 	minecraft {
