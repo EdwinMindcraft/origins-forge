@@ -1,14 +1,10 @@
 import com.edwinmindcraft.gradle.BrokenJarJar
-import com.edwinmindcraft.gradle.ModsTransformer
-import com.github.logicfan.gradle.shadow.transformers.JsonTransformer
 
 plugins {
 	id 'net.minecraftforge.gradle'
 	id 'idea'
 	id 'org.spongepowered.mixin'
 	id 'org.parchmentmc.librarian.forgegradle'
-	id 'com.github.johnrengelman.shadow'
-	id 'com.github.logicfan.gradle.shadow.json-transformer' version "1.0.1"
 	id 'maven-publish'
 }
 
@@ -331,38 +327,6 @@ mixin {
 }
 
 jar.finalizedBy('reobfJar')
-
-
-shadowJar {
-	classifier 'unified'
-	configurations = [project.configurations.compileClasspath]
-	dependencies {
-		include(dependency {
-			it.moduleGroup == 'io.github.edwinmindcraft'
-		})
-		include dependency(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${aea_version}-${minecraft_version}")
-	}
-	subprojects.each {
-		dependsOn(it.getTasksByName("reobfJar", true))
-	}
-	append 'META-INF/accesstransformer.cfg'
-	transform(new JsonTransformer(resource: 'META-INF/coremods.json'))
-	transform(new ModsTransformer())
-	manifest {
-		attributes(
-				"Specification-Title": "origins",
-				"Specification-Vendor": "Apace100",
-				"Specification-Version": project.origins_specs,
-				"Implementation-Title": "origins-forge",
-				"Implementation-Version": project.version,
-				"Implementation-Vendor": "EdwinMindcraft",
-				"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-				'MixinConfigs': 'origins.mixins.json,apoli.mixins.json,additionalentityattributes.mixins.json')
-	}
-}
-
-shadowJar.finalizedBy(reobf.maybeCreate('shadowJar'))
-build.dependsOn('shadowJar')
 
 minecraft {
 	mappings channel: "${rootProject.mappings_channel}", version: "${rootProject.mappings_version}"
