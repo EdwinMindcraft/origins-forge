@@ -136,9 +136,9 @@ allprojects {
 		//runtimeOnly fg.deobf("curse.maven:connectivity-470193:3833738")
 
 		//implementation fg.deobf(group: 'me.shedaniel.cloth', name: 'cloth-config-forge', version: "${cloth_config_version}")
-		implementation fg.deobf(group: 'top.theillusivec4.caelus', name: 'caelus-forge', version: "1.19-${caelus_version}")
-		runtimeOnly(fg.deobf(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${aea_version}-${minecraft_version}", transitive: false))
-		compileOnly(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${aea_version}-${minecraft_version}", transitive: false)
+		implementation fg.deobf(group: 'top.theillusivec4.caelus', name: 'caelus-forge', version: "1.19.2-${caelus_version}")
+		runtimeOnly(fg.deobf(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${aea_version}", transitive: false))
+		compileOnly(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${aea_version}", transitive: false)
 	}
 
 	tasks.withType(JavaCompile) {
@@ -182,8 +182,8 @@ project(":apoli") {
 			exclude group: 'net.minecraftforge', module: 'forge'
 		}
 
-		jarJar(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "[${aea_version}-${minecraft_version},)", transitive: false) {
-			jarJar.pin(it, "${aea_version}-${minecraft_version}")
+		jarJar(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "[${aea_version},)", transitive: false) {
+			jarJar.pin(it, "${aea_version}")
 		}
 
 		jarJar(project(':calio')) {
@@ -207,23 +207,6 @@ project(":apoli") {
 		}
 	}
 
-	//TODO Wait for FG to do this properly.
-	def jij = tasks.create("brokenJarJar", BrokenJarJar) {
-		dependsOn(":calio:reobfJar")
-		finalizedBy(reobf.maybeCreate('brokenJarJar'))
-
-		group("jarJar")
-		description("Create a combined JAR of project and selected dependencies")
-		classifier("fatjar")
-
-		manifest {
-			inheritFrom(project.getTasks().getByName("jar").manifest)
-		}
-
-		from(sourceSets.main.output)
-
-		configuration(project.configurations.jarJar)
-	}
 
 	reobf.maybeCreate("jar").dependsOn(":origins:classes")
 
@@ -237,7 +220,6 @@ project(":apoli") {
 
 	artifacts {
 		archives jar
-		archives jij
 	}
 
 }
@@ -253,8 +235,8 @@ project(":origins") {
 			exclude group: 'net.minecraftforge', module: 'forge'
 		}
 
-		jarJar(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "[${aea_version}-${minecraft_version},)", transitive: false) {
-			jarJar.pin(it, "${aea_version}-${minecraft_version}")
+		jarJar(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "[${aea_version},)", transitive: false) {
+			jarJar.pin(it, "${aea_version}")
 		}
 
 		jarJar(project(':calio')) {
@@ -286,27 +268,8 @@ project(":origins") {
 
 	compileJava.dependsOn(":apoli:classes", ":calio:classes")
 
-	//TODO Wait for FG to do this properly.
-	def jij = tasks.create("brokenJarJar", BrokenJarJar) {
-		dependsOn(":apoli:reobfJar", ":calio:reobfJar")
-		finalizedBy(reobf.maybeCreate('brokenJarJar'))
-
-		group("jarJar")
-		description("Create a combined JAR of project and selected dependencies")
-		classifier("fatjar")
-
-		manifest {
-			inheritFrom(project.getTasks().getByName("jar").manifest)
-		}
-
-		from(sourceSets.main.output)
-
-		configuration(project.configurations.jarJar)
-	}
-
 	artifacts {
 		archives jar
-		archives jij
 	}
 
 	tasks.findByName("jarJar").configure {
@@ -337,6 +300,8 @@ minecraft {
 			property 'forge.logging.markers', 'REGISTRIES'
 			property 'forge.logging.console.level', 'debug'
 
+			taskName 'Client'
+
 			arg '--mixin.debug=true'
 			subprojects.each { mod ->
 				mods.create(mod.ext.modName) {
@@ -350,6 +315,8 @@ minecraft {
 
 			property 'forge.logging.markers', 'REGISTRIES'
 			property 'forge.logging.console.level', 'debug'
+
+			taskName 'Server'
 
 			//arg '--mixin.debug=true'
 			subprojects.each { mod ->
@@ -376,6 +343,7 @@ minecraft {
 			runs.create(name) { run ->
 				parent runs["data"]
 				subprojects.each { if (it != mod) run.args '--existing-mod', it.name }
+				taskName org.apache.commons.lang3.StringUtils.capitalize(mod.ext.modName) + " Data"
 				args '--all'
 				args '--mod', mod.ext.modName
 				args '--existing', mod.file('src/main/resources')
