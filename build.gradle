@@ -25,7 +25,7 @@ allprojects {
 		maven { url 'https://maven.architectury.dev' }
 		maven { url 'https://maven.theillusivec4.top' }
 		maven { url 'https://repo.spongepowered.org/maven' }
-		maven { url 'https://dvs1.progwml6.com/files/maven' }
+		maven { url 'https://maven.blamejared.com/' }
 		maven { url 'https://maven.theillusivec4.top/' }
 		maven {
 			url 'https://www.cursemaven.com'
