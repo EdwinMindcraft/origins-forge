@@ -144,6 +144,20 @@ allprojects {
 			outputs.upToDateWhen { false }
 		}
 	}
+
+	publishing {
+		publications {
+			mavenJava(MavenPublication) {
+				groupId project.group
+				artifactId project.archivesBaseName
+				version project.version
+				artifact jar
+			}
+		}
+		repositories {
+			mavenLocal()
+		}
+	}
 }
 
 dependencies {
