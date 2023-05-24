@@ -1,11 +1,8 @@
-import com.edwinmindcraft.gradle.BrokenJarJar
-
 plugins {
 	id 'net.minecraftforge.gradle'
 	id 'idea'
 	id 'org.spongepowered.mixin'
 	id 'org.parchmentmc.librarian.forgegradle'
-	id 'maven-publish'
 }
 
 
@@ -14,6 +11,7 @@ version = "${minecraft_version}-${origins_version}"
 
 allprojects {
 	apply plugin: 'java'
+	apply plugin: 'maven-publish'
 
 	java {
 		toolchain {
