@@ -1,5 +1,3 @@
-import com.edwinmindcraft.gradle.BrokenJarJar
-
 plugins {
 	id 'net.minecraftforge.gradle'
 	id 'idea'
@@ -291,12 +289,22 @@ mixin {
 
 jar.finalizedBy('reobfJar')
 
+processTestResources {
+    outputs.upToDateWhen { false }
+    subprojects.each {mod ->
+        from mod.sourceSets.test.resources
+    }
+}
+
 minecraft {
 	mappings channel: "${rootProject.mappings_channel}", version: "${rootProject.mappings_version}"
 
 	runs {
 		client {
 			workingDirectory project.file('run')
+
+            ideaModule "${rootProject.name}.test"
+            
 			property 'forge.logging.markers', 'REGISTRIES'
 			property 'forge.logging.console.level', 'debug'
 
@@ -306,12 +314,15 @@ minecraft {
 			subprojects.each { mod ->
 				mods.create(mod.ext.modName) {
 					source mod.sourceSets.main
+                    source mod.sourceSets.test
 				}
 			}
 		}
 
 		server {
 			workingDirectory project.file('run')
+
+            ideaModule "${rootProject.name}.test"
 
 			property 'forge.logging.markers', 'REGISTRIES'
 			property 'forge.logging.console.level', 'debug'
@@ -322,6 +333,7 @@ minecraft {
 			subprojects.each { mod ->
 				mods.create(mod.ext.modName) {
 					source mod.sourceSets.main
+                    source mod.sourceSets.test
 				}
 			}
 		}
