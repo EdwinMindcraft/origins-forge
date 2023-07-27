@@ -3,7 +3,6 @@ plugins {
 	id 'idea'
 	id 'org.spongepowered.mixin'
 	id 'org.parchmentmc.librarian.forgegradle'
-	id 'maven-publish'
 }
 
 
@@ -12,6 +11,7 @@ version = "${minecraft_version}-${origins_version}"
 
 allprojects {
 	apply plugin: 'java'
+	apply plugin: 'maven-publish'
 
 	java {
 		toolchain {
@@ -25,7 +25,7 @@ allprojects {
 		maven { url 'https://maven.architectury.dev' }
 		maven { url 'https://maven.theillusivec4.top' }
 		maven { url 'https://repo.spongepowered.org/maven' }
-		maven { url 'https://dvs1.progwml6.com/files/maven' }
+		maven { url 'https://maven.blamejared.com/' }
 		maven { url 'https://maven.theillusivec4.top/' }
 		maven {
 			url 'https://www.cursemaven.com'
@@ -142,6 +142,20 @@ allprojects {
 	tasks.withType(JavaCompile) {
 		if (gradle.startParameter.taskNames.contains("build")) {
 			outputs.upToDateWhen { false }
+		}
+	}
+
+	publishing {
+		publications {
+			mavenJava(MavenPublication) {
+				groupId project.group
+				artifactId project.archivesBaseName
+				version project.version
+				artifact jar
+			}
+		}
+		repositories {
+			mavenLocal()
 		}
 	}
 }
