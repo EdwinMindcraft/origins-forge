@@ -10,8 +10,30 @@ Then run `gradlew build` in the root directory. The build output is the `unified
 
 ## Creating addons
 
+### 1.7.1.1 and above
+Origins Forge now uses the MerchantPug maven to host its artifacts. To use this, add the following to your gradle build script:
+```gradle
+repositories {
+    ...
+    maven {
+        url "https://maven.merchantpug.net"
+    }
+}
+
+dependencies {
+    ...
+    implementation fg.deobf("io.github.edwinmindcraft.Origins:calio-forge:<version>")
+    implementation fg.deobf("io.github.edwinmindcraft.Origins:apoli-forge:<version>")
+    implementation fg.deobf("io.github.edwinmindcraft.Origins:origins-forge:<version>")
+}
+```
+
+You can find the version by looking at the GitHub release page of [EdwinMindcraft/origins-architectury](https://github.com/EdwinMindcraft/origins-architectury). 
+Unlike the Fabric version, you are meant to use the same version for all three of these libraries.
+
+### Versions prior to 1.7.1.1
 The simplest way to load Origins in a dev environment is currently to use
-[Curse Maven](https://www.cursemaven.com/). Do do so, add the flowing to your
+[Curse Maven](https://www.cursemaven.com/). To do so, add the flowing to your
 gradle build script:
 ```gradle
 repositories {
@@ -31,6 +53,9 @@ dependencies {
 ```
 
 You can find file ids on [CurseForge](https://www.curseforge.com/minecraft/mc-mods/origins-forge/files).
+
+### Backup Mavens
+Viable alternatives if one of these two methods don't work are the [Modrinth Maven](https://docs.modrinth.com/docs/tutorials/maven/) or [JitPack](https://jitpack.io/#EdwinMindcraft/origins-forge) (using a commit hash).
 
 ### Changes from fabric
 Apoli for forge is partial rewrite of the fabric version, as such many compatiblity features
