@@ -22,14 +22,14 @@ repositories {
 
 dependencies {
     ...
-    implementation fg.deobf("io.github.edwinmindcraft.Origins:calio-forge:<version>")
-    implementation fg.deobf("io.github.edwinmindcraft.Origins:apoli-forge:<version>")
-    implementation fg.deobf("io.github.edwinmindcraft.Origins:origins-forge:<version>")
+    implementation fg.deobf("io.github.edwinmindcraft:calio-forge:${calio_forge_version}")
+    implementation fg.deobf("io.github.edwinmindcraft:apoli-forge:${apoli_forge_version}")
+    implementation fg.deobf("io.github.edwinmindcraft:origins-forge:${origins_forge_version}")
 }
 ```
 
-You can find the version by looking at the GitHub release page of [EdwinMindcraft/origins-architectury](https://github.com/EdwinMindcraft/origins-architectury). 
-Unlike the Fabric version, you are meant to use the same version for all three of these libraries.
+You can find each individual version by looking at the [Reposilite maven page](https://maven.merchantpug.net/#/releases/io/github/edwinmindcraft).
+Alternatively, you can look at the released JARs on the GitHub releases page of [EdwinMindcraft/origins-architectury](https://github.com/EdwinMindcraft/origins-architectury).
 
 ### Versions prior to 1.7.1.1
 The simplest way to load Origins in a dev environment is currently to use
