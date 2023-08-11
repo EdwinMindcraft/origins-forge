@@ -40,6 +40,7 @@ allprojects {
 			}
 		}
 		maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.merchantpug.net' }
 		mavenCentral()
 	}
 }
@@ -104,6 +105,28 @@ subprojects {
 					'forge_requirements': rootProject.forge_requirements
 		}
 	}
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                groupId project.group
+                artifactId project.archivesBaseName
+                version project.version
+                artifact jar
+            }
+        }
+        repositories {
+            maven {
+                name = "merchantpug"
+                url = "https://maven.merchantpug.net/releases"
+                credentials(PasswordCredentials)
+                authentication {
+                    create("basic", BasicAuthentication)
+                }
+            }
+            mavenLocal()
+        }
+    }
 }
 
 java {
@@ -135,35 +158,13 @@ allprojects {
 
 		//implementation fg.deobf(group: 'me.shedaniel.cloth', name: 'cloth-config-forge', version: "${cloth_config_version}")
 		implementation fg.deobf(group: 'top.theillusivec4.caelus', name: 'caelus-forge', version: "1.19.2-${caelus_version}")
-		runtimeOnly(fg.deobf(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${aea_version}", transitive: false))
-		compileOnly(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "${aea_version}", transitive: false)
+		runtimeOnly(fg.deobf(group: 'de.dafuqs', name: 'additionalentityattributes-forge-1.19', version: "${aea_version}", transitive: false))
+		compileOnly(group: 'de.dafuqs', name: 'additionalentityattributes-forge-1.19', version: "${aea_version}", transitive: false)
 	}
 
 	tasks.withType(JavaCompile) {
 		if (gradle.startParameter.taskNames.contains("build")) {
 			outputs.upToDateWhen { false }
-		}
-	}
-
-	publishing {
-		publications {
-			mavenJava(MavenPublication) {
-				groupId project.group
-				artifactId project.archivesBaseName
-				version project.version
-				artifact jar
-			}
-		}
-		repositories {
-            maven {
-                name = "merchantpug"
-                url = "https://maven.merchantpug.net/releases"
-                credentials(PasswordCredentials)
-                authentication {
-                    create("basic", BasicAuthentication)
-                }
-            }
-			mavenLocal()
 		}
 	}
 }
@@ -202,7 +203,7 @@ project(":apoli") {
 			exclude group: 'net.minecraftforge', module: 'forge'
 		}
 
-		jarJar(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "[${aea_version},)", transitive: false) {
+		jarJar(group: 'de.dafuqs', name: 'additionalentityattributes-forge-1.19', version: "[${aea_version},)", transitive: false) {
 			jarJar.pin(it, "${aea_version}")
 		}
 
@@ -255,7 +256,7 @@ project(":origins") {
 			exclude group: 'net.minecraftforge', module: 'forge'
 		}
 
-		jarJar(group: 'com.github.EdwinMindcraft.AdditionalEntityAttributes', name: 'Forge', version: "[${aea_version},)", transitive: false) {
+		jarJar(group: 'de.dafuqs', name: 'additionalentityattributes-forge-1.19', version: "[${aea_version},)", transitive: false) {
 			jarJar.pin(it, "${aea_version}")
 		}
 
