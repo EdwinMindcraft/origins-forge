@@ -157,9 +157,9 @@ allprojects {
 		//runtimeOnly fg.deobf("curse.maven:connectivity-470193:3833738")
 
 		//implementation fg.deobf(group: 'me.shedaniel.cloth', name: 'cloth-config-forge', version: "${cloth_config_version}")
-		implementation fg.deobf(group: 'top.theillusivec4.caelus', name: 'caelus-forge', version: "1.19.2-${caelus_version}")
-		runtimeOnly(fg.deobf(group: 'de.dafuqs', name: 'additionalentityattributes-forge-1.19', version: "${aea_version}", transitive: false))
-		compileOnly(group: 'de.dafuqs', name: 'additionalentityattributes-forge-1.19', version: "${aea_version}", transitive: false)
+		implementation fg.deobf(group: 'top.theillusivec4.caelus', name: 'caelus-forge', version: "${caelus_version}+1.20")
+		runtimeOnly(fg.deobf(group: 'de.dafuqs', name: 'additionalentityattributes-forge', version: "${aea_version}+${minecraft_version}", transitive: false))
+		compileOnly(group: 'de.dafuqs', name: 'additionalentityattributes-forge', version: "${aea_version}+${minecraft_version}", transitive: false)
 	}
 
 	tasks.withType(JavaCompile) {
@@ -203,8 +203,8 @@ project(":apoli") {
 			exclude group: 'net.minecraftforge', module: 'forge'
 		}
 
-		jarJar(group: 'de.dafuqs', name: 'additionalentityattributes-forge-1.19', version: "[1.0.1,)", transitive: false) {
-			jarJar.pin(it, "${aea_version}")
+		jarJar(group: 'de.dafuqs', name: 'additionalentityattributes-forge', version: "[1.4.0.0,)", transitive: false) {
+			jarJar.pin(it, "${aea_version}+${minecraft_version}")
 		}
 
 		jarJar(project(':calio')) {
@@ -256,8 +256,8 @@ project(":origins") {
 			exclude group: 'net.minecraftforge', module: 'forge'
 		}
 
-		jarJar(group: 'de.dafuqs', name: 'additionalentityattributes-forge-1.19', version: "[1.0.1,)", transitive: false) {
-			jarJar.pin(it, "${aea_version}")
+		jarJar(group: 'de.dafuqs', name: 'additionalentityattributes-forge', version: "[1.4.0.0,)", transitive: false) {
+			jarJar.pin(it, "${aea_version}+${minecraft_version}")
 		}
 
 		jarJar(project(':calio')) {
