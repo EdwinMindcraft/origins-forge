@@ -116,15 +116,17 @@ subprojects {
             }
         }
         repositories {
-            maven {
-                name = "merchantpug"
-                url = "https://maven.merchantpug.net/releases"
-                credentials(PasswordCredentials)
-                authentication {
-                    create("basic", BasicAuthentication)
+            if (project.name != 'Origins') {
+                maven {
+                    name = "merchantpug"
+                    url = "https://maven.merchantpug.net/releases"
+                    credentials(PasswordCredentials)
+                    authentication {
+                        create("basic", BasicAuthentication)
+                    }
                 }
+                mavenLocal()
             }
-            mavenLocal()
         }
     }
 }
