@@ -106,17 +106,17 @@ subprojects {
 		}
 	}
 
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                groupId project.group
-                artifactId project.archivesBaseName
-                version project.version
-                artifact jar
+    if (project.archivesBaseName != 'Origins') {
+        publishing {
+            publications {
+                mavenJava(MavenPublication) {
+                    groupId project.group
+                    artifactId project.archivesBaseName
+                    version project.version
+                    artifact jar
+                }
             }
-        }
-        repositories {
-            if (project.name != 'Origins') {
+            repositories {
                 maven {
                     name = "merchantpug"
                     url = "https://maven.merchantpug.net/releases"
