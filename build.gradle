@@ -380,7 +380,8 @@ minecraft {
 			runs.create(name) { run ->
 				parent runs["data"]
 				subprojects.each { if (it != mod) run.args '--existing-mod', it.name }
-				taskName org.apache.commons.lang3.StringUtils.capitalize(mod.ext.modName) + " Data"
+                ideaModule "${rootProject.name}.${mod.name}.main"
+				taskName org.apache.commons.lang3.StringUtils.capitalize(mod.ext.modName) + "Data"
 				args '--all'
 				args '--mod', mod.ext.modName
 				args '--existing', mod.file('src/main/resources')
