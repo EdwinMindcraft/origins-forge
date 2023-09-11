@@ -205,7 +205,7 @@ project(":apoli") {
 			exclude group: 'net.minecraftforge', module: 'forge'
 		}
 
-		jarJar(group: 'de.dafuqs', name: 'additionalentityattributes-forge', version: "[1.4.0.0,)", transitive: false) {
+		jarJar(group: 'de.dafuqs', name: 'additionalentityattributes-forge', version: "[${aea_version.split('\\+')[0]},)", transitive: false) {
 			jarJar.pin(it, "${aea_version}+${minecraft_version}")
 		}
 
@@ -258,7 +258,7 @@ project(":origins") {
 			exclude group: 'net.minecraftforge', module: 'forge'
 		}
 
-		jarJar(group: 'de.dafuqs', name: 'additionalentityattributes-forge', version: "[1.4.0.0,)", transitive: false) {
+		jarJar(group: 'de.dafuqs', name: 'additionalentityattributes-forge', version: "[${aea_version.split('\\+')[0]},)", transitive: false) {
 			jarJar.pin(it, "${aea_version}+${minecraft_version}")
 		}
 
