@@ -1,12 +1,12 @@
 [submodule "calio"]
 	path = calio
 	url = git@github.com:EdwinMindcraft/calio.git
-	branch = 1.17.x/forge
+	branch = 1.20.x/forge
 [submodule "apoli"]
 	path = apoli
 	url = git@github.com:EdwinMindcraft/apoli.git
-	branch = 1.17.x/forge
+	branch = 1.20.x/forge
 [submodule "origins"]
 	path = origins
 	url = git@github.com:EdwinMindcraft/origins-architectury.git
-	branch = 1.17.x
+	branch = 1.20.x/forge
