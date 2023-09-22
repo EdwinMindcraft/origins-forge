@@ -2,7 +2,7 @@ pluginManagement {
 	resolutionStrategy {
 		eachPlugin({
 			if (requested.id.namespace == 'net.minecraftforge')
-				it.useModule(group: 'net.minecraftforge.gradle', name:'ForgeGradle', version: '6.0.0')
+				it.useModule(group: 'net.minecraftforge.gradle', name:'ForgeGradle', version: '6.0.+')
 			if (requested.id.namespace == 'org.spongepowered')
 				it.useModule(group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT')
 			if (requested.id.namespace == 'org.parchmentmc.librarian')

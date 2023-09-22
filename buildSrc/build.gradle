@@ -15,7 +15,7 @@ repositories {
 
 dependencies {
 	implementation 'gradle.plugin.com.github.johnrengelman:shadow:7.1.0'
-	implementation 'net.minecraftforge.gradle:ForgeGradle:5.1.+'
+	implementation 'net.minecraftforge.gradle:ForgeGradle:6.0.+'
 	implementation 'org.apache.maven:maven-artifact:3.8.1'
 	implementation 'net.minecraftforge:JarJar:0.3.+'
 }
