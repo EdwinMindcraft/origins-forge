@@ -158,8 +158,9 @@ allprojects {
 		//runtimeOnly "curse.maven:citadel-331936:${rootProject.citadel_file}"
 		//runtimeOnly fg.deobf("curse.maven:ears-412013:${rootProject.ears_file}")
 		//runtimeOnly "curse.maven:apocalypse-521235:3837371"
-		//runtimeOnly fg.deobf("curse.maven:originsplusplus-602828:3836472")
-		//runtimeOnly fg.deobf("curse.maven:pehkui-319596:3808012")
+		//runtimeOnly fg.deobf("curse.maven:originsplusplus-602828:4763246")
+		//runtimeOnly fg.deobf("curse.maven:pehkui-319596:4684387")
+		//runtimeOnly fg.deobf("curse.maven:xl-packets-391640:4426828")
 		//runtimeOnly fg.deobf("curse.maven:connectivity-470193:3833738")
 
 		//implementation fg.deobf(group: 'me.shedaniel.cloth', name: 'cloth-config-forge', version: "${cloth_config_version}")
@@ -195,8 +196,15 @@ project(":calio") {
 					"Implementation-Title": "calio-forge",
 					"Implementation-Version": project.version,
 					"Implementation-Vendor": "EdwinMindcraft",
-					"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"))
+					"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+					'MixinConfigs': 'calio..mixins.json')
 		}
+	}
+
+	mixin {
+		add sourceSets.main, 'calio.refmap.json'
+
+		config 'calio.mixins.json'
 	}
 }
 
@@ -311,6 +319,7 @@ project(":origins") {
 }
 
 mixin {
+	config 'calio.mixins.json'
 	config 'apoli.mixins.json'
 	config 'origins.mixins.json'
 }
@@ -338,7 +347,7 @@ minecraft {
 
 			taskName 'Client'
 
-			arg '--mixin.debug=true'
+			arg '--Dmixin.debug=true'
 			subprojects.each { mod ->
 				mods.create(mod.ext.modName) {
 					source mod.sourceSets.main
