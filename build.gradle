@@ -39,7 +39,7 @@ allprojects {
 			}
 		}
 		maven { url 'https://jitpack.io' }
-        maven { url 'https://maven.merchantpug.net' }
+        maven { url 'https://maven.merchantpug.net/releases' }
 		mavenCentral()
 		mavenLocal()
 	}
