@@ -110,11 +110,10 @@ subprojects {
         publishing {
             publications {
                 mavenJava(MavenPublication) {
-                    groupId project.group
-                    artifactId project.archivesBaseName
-                    version project.version
-					from components.java
-					fg.component(it)
+					groupId project.group
+					artifactId project.archivesBaseName
+					version project.version
+					artifact jar
                 }
             }
             repositories {
