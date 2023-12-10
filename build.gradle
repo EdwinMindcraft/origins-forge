@@ -346,7 +346,7 @@ minecraft {
 
 			taskName 'Client'
 
-			arg '--Dmixin.debug=true'
+			jvmArgs "-Dmixin.debug.verbose=true", "-Dmixin.debug.export=true"
 			subprojects.each { mod ->
 				mods.create(mod.ext.modName) {
 					source mod.sourceSets.main
