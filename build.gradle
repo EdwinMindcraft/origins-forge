@@ -344,6 +344,9 @@ minecraft {
 				mods.create(mod.ext.modName) {
 					source mod.sourceSets.main
                     source mod.sourceSets.test
+					if (mod.ext.modName == "origins") {
+						source rootProject.sourceSets.test
+					}
 				}
 			}
 		}
@@ -363,6 +366,9 @@ minecraft {
 				mods.create(mod.ext.modName) {
 					source mod.sourceSets.main
                     source mod.sourceSets.test
+					if (mod.ext.modName == "origins") {
+						source rootProject.sourceSets.test
+					}
 				}
 			}
 		}
