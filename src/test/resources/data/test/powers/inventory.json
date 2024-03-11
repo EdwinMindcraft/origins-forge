@@ -1,0 +1,23 @@
+{
+  "type": "apoli:action_over_time",
+  "interval": 20,
+  "entity_action": {
+    "type": "apoli:execute_command",
+    "command": "say Found item in slot!"
+  },
+  "condition": {
+    "type": "apoli:inventory",
+    "item_condition": {
+      "type": "origins:ingredient",
+      "ingredient": {
+        "tag": "minecraft:flowers"
+      }
+    },
+    "slots": [
+      "hotbar.0",
+      "hotbar.1"
+    ],
+    "comparison": "<",
+    "compare_to": 16
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "apoli:action_on_callback",
+  "entity_action_gained": {
+    "type": "origins:execute_command",
+    "command": "say Gained power!"
+  },
+  "entity_action_lost": {
+    "type": "origins:execute_command",
+    "command": "say Lost power!"
+  },
+  "entity_action_added": {
+    "type": "origins:execute_command",
+    "command": "say Added power!"
+  },
+  "entity_action_removed": {
+    "type": "origins:execute_command",
+    "command": "say Removed power!"
+  },
+  "entity_action_respawned": {
+    "type": "origins:execute_command",
+    "command": "say Respawned!"
+  }
+}

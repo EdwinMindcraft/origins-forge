@@ -1,0 +1,11 @@
+{
+  "type": "apoli:self_glow",
+  "use_teams": false,
+  "red": 0.56862745098,
+  "green": 0.89019607843,
+  "blue": 0.65098039215,
+  "condition": {
+    "type": "apoli:ability",
+    "ability": "minecraft:mayfly"
+  }
+}

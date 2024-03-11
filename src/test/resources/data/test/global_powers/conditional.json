@@ -1,0 +1,9 @@
+{
+  "entity_types": [
+    "minecraft:player"
+  ],
+  "powers": [
+    "test:conditional_any",
+    "test:conditional_all"
+  ]
+}

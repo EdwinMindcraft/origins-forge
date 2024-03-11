@@ -325,13 +325,6 @@ mixin {
 
 jar.finalizedBy('reobfJar')
 
-processTestResources {
-    outputs.upToDateWhen { false }
-    subprojects.each {mod ->
-        from mod.sourceSets.test.resources
-    }
-}
-
 minecraft {
 	mappings channel: "${rootProject.mappings_channel}", version: "${rootProject.mappings_version}"
 

@@ -1,0 +1,11 @@
+{
+  "powers": [
+    "test:lots_of_badges",
+    "test:recipes_with_badges"
+  ],
+	"icon": {
+		"item": "minecraft:emerald"
+	},
+	"order": 0,
+	"impact": 0
+}

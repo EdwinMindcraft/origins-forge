@@ -1,0 +1,26 @@
+{
+  "type": "apoli:multiple",
+  "toggle": {
+    "type": "apoli:toggle",
+    "active_by_default": false,
+    "key": {
+      "key": "key.origins.primary_active"
+    }
+  },
+  "shader": {
+    "type": "apoli:shader",
+    "condition": {
+      "type": "apoli:power_active",
+      "power": "*:*_toggle"
+    },
+    "shader": "minecraft:shaders/post/desaturate.json"
+  },
+  "invis": {
+    "type": "apoli:invisibility",
+    "render_armor": false,
+    "conditions": {
+      "type": "apoli:power_active",
+      "power": "*:*_toggle"
+    }
+  }
+}

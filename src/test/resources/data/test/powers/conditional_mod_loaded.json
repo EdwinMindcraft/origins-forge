@@ -1,0 +1,19 @@
+{
+  "type": "apoli:active_self",
+  "cooldown": 1,
+  "hud_render": {
+    "should_render": false
+  },
+  "entity_action": {
+    "type": "apoli:execute_command",
+    "command": "say Loaded Caelus!"
+  },
+  "key": {
+    "key": "key.use",
+    "continuous": false
+  },
+  "forge:conditions": {
+    "type": "forge:mod_loaded",
+    "modid": "caelus"
+  }
+}

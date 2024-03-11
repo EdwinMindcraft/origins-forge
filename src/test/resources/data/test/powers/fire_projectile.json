@@ -1,0 +1,10 @@
+{
+  "type": "apoli:action_over_time",
+  "interval": 15,
+  "entity_action": {
+    "type": "apoli:fire_projectile",
+    "entity_type": "minecraft:snowball",
+    "divergence": 3.0,
+    "count": 3
+  }
+}

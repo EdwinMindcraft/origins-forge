@@ -1,0 +1,10 @@
+{
+  "type": "apoli:action_on_item_use",
+  "item_action": {
+    "type": "apoli:holder",
+    "entity_action": {
+      "type": "apoli:execute_command",
+      "command": "say Holder!"
+    }
+  }
+}
