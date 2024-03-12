@@ -1,83 +1,29 @@
 {
-  "type": "origins:multiple",
-  "name": "Sunscreen",
-  "hidden": true,
-  "stacks": {
-    "type": "origins:resource",
-    "min": 0,
-    "max": 4,
-    "start_value": 0,
-    "hud_render": {
-      "should_render": true,
-      "sprite_location": "origins:textures/gui/community/huang/resource_bar_02.png",
-      "bar_index": 20,
-      "condition": {
-        "type": "origins:resource",
-        "resource": "*:*_stacks",
-        "comparison": ">",
-        "compare_to": 0
+  "type": "origins:action_on_being_used",
+  "item_condition": {
+    "type": "origins:ingredient",
+    "ingredient": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "bientity_condition": {
+    "type": "origins:distance",
+    "comparison": "<=",
+    "compare_to": 3
+  },
+  "held_item_action": {
+    "type": "origins:consume",
+    "amount": 1
+  },
+  "bientity_action": {
+    "type": "origins:actor_action",
+    "action": {
+      "type": "origins:give",
+      "stack": {
+        "item": "minecraft:glass_bottle",
+        "amount": 1
       }
     }
   },
-  "expire_at_end_of_day": {
-    "type": "origins:action_over_time",
-    "interval": 20,
-    "condition": {
-      "type": "origins:daytime"
-    },
-    "falling_action": {
-      "type": "origins:change_resource",
-      "resource": "*:*_stacks",
-      "operation": "set",
-      "change": 0
-    }
-  },
-  "apply_with_help": {
-    "type": "origins:action_on_being_used",
-    "item_condition": {
-      "type": "origins:ingredient",
-      "ingredient": {
-        "item": "minecraft:iron_ingot"
-      }
-    },
-    "condition": {
-      "type": "origins:resource",
-      "resource": "*:*_stacks",
-      "comparison": "<",
-      "compare_to": 4
-    },
-    "bientity_condition": {
-      "type": "origins:distance",
-      "comparison": "<=",
-      "compare_to": 3
-    },
-    "held_item_action": {
-      "type": "origins:consume",
-      "amount": 1
-    },
-    "bientity_action": {
-      "type": "origins:and",
-      "actions": [
-        {
-          "type": "origins:target_action",
-          "action": {
-            "type": "origins:change_resource",
-            "resource": "*:*_stacks",
-            "change": 2
-          }
-        },
-        {
-          "type": "origins:actor_action",
-          "action": {
-            "type": "origins:give",
-            "stack": {
-              "item": "minecraft:glass_bottle",
-              "amount": 1
-            }
-          }
-        }
-      ]
-    },
-    "action_result": "success"
-  }
+  "action_result": "success"
 }
