@@ -40,7 +40,7 @@ allprojects {
 			}
 		}
 		maven { url 'https://jitpack.io' }
-        maven { url 'https://maven.merchantpug.net' }
+        maven { url 'https://maven.merchantpug.net/releases' }
 		mavenCentral()
 	}
 }
@@ -159,7 +159,7 @@ allprojects {
 		//implementation fg.deobf(group: 'me.shedaniel.cloth', name: 'cloth-config-forge', version: "${cloth_config_version}")
 		implementation fg.deobf(group: 'top.theillusivec4.caelus', name: 'caelus-forge', version: "1.19.2-${caelus_version}")
 		runtimeOnly(fg.deobf(group: 'de.dafuqs', name: 'additionalentityattributes-forge-1.19', version: "${aea_version}", transitive: false))
-		compileOnly(group: 'de.dafuqs', name: 'additionalentityattributes-forge-1.19', version: "${aea_version}", transitive: false)
+		compileOnly(fg.deobf(group: 'de.dafuqs', name: 'additionalentityattributes-forge-1.19', version: "${aea_version}", transitive: false))
 	}
 
 	tasks.withType(JavaCompile) {
