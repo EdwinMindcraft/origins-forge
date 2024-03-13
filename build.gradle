@@ -106,6 +106,33 @@ subprojects {
 					'forge_requirements': rootProject.forge_requirements
 		}
 	}
+
+	if (project.archivesBaseName != 'Origins') {
+		publishing {
+			publications {
+				mavenJava(MavenPublication) {
+					groupId project.group
+					artifactId project.archivesBaseName
+					version project.version
+					artifact jar
+				}
+			}
+			repositories {
+				maven {
+					name = "merchantpug"
+					url = "https://maven.merchantpug.net/releases"
+					credentials {
+						username System.getenv('MAVEN_USERNAME')
+						password System.getenv('MAVEN_PASSWORD')
+					}
+					authentication {
+						create("basic", BasicAuthentication)
+					}
+				}
+				mavenLocal()
+			}
+		}
+	}
 }
 
 java {
