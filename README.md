@@ -31,7 +31,7 @@ dependencies {
 You can find each individual version by looking at the [Reposilite maven page](https://maven.merchantpug.net/#/releases/io/github/edwinmindcraft).
 Alternatively, you can look at the released JARs on the GitHub releases page of [EdwinMindcraft/origins-architectury](https://github.com/EdwinMindcraft/origins-architectury).
 
-### Versions prior to 1.7.1.1
+### Versions prior to 1.5.0.2
 The simplest way to load Origins in a dev environment is currently to use
 [Curse Maven](https://www.cursemaven.com/). To do so, add the flowing to your
 gradle build script:
