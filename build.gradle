@@ -119,7 +119,10 @@ subprojects {
             maven {
                 name = "merchantpug"
                 url = "https://maven.merchantpug.net/releases"
-                credentials(PasswordCredentials)
+				credentials {
+					username System.getenv('MAVEN_USERNAME')
+					password System.getenv('MAVEN_PASSWORD')
+				}
                 authentication {
                     create("basic", BasicAuthentication)
                 }
