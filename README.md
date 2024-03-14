@@ -83,7 +83,7 @@ Other important changes:
 * When fabric used `Predicate` or `Consumer`, you'll need to use the matching `ConfiguredCondition` or `ConfiguredAction`
 * Codecs are provided for most types, either in the class itself, or in the same places
 as fabric `SerializableDataTypes` and `ApoliDataTypes`.
-* Prefer using `CalioCodecHelper.optionalField` over `Codec.optionalFieldOf` 
+* Prefer using `ExtraCodecs.strictOptionalField` over `Codec.optionalFieldOf` 
   since those field will properly handle error logging.
 * Prefer using `CalioCodecHelper.listOf` over `Codec.listOf` since those lists
   support the calio format of list.
